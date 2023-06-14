@@ -2,7 +2,7 @@ const DataTypes = require("sequelize").DataTypes;
 
 module.exports = {
   up: async (queryInterface) => {
-    await queryInterface.createTable("Artwork", {
+    await queryInterface.createTable("Project", {
       id: {
         type: DataTypes.UUID,
         field: "id",
@@ -10,14 +10,21 @@ module.exports = {
         default: DataTypes.UUIDV4,
         allowNull: false,
       },
-      image: {
+      images: {
         type: DataTypes.JSONB,
-        field: "image",
-        allowNull: false,
+        field: "images",
       },
       name: {
         type: DataTypes.STRING,
         field: "name",
+      },
+      description: {
+        type: DataTypes.STRING(800),
+        field: "description",
+      },
+      content: {
+        type: DataTypes.STRING(8000),
+        field: "content",
       },
       feature: {
         type: DataTypes.BOOLEAN,
@@ -42,6 +49,6 @@ module.exports = {
     });
   },
   down: async (queryInterface) => {
-    await queryInterface.dropTable("Artwork");
+    await queryInterface.dropTable("Project");
   },
 };

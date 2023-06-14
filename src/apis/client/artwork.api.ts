@@ -1,12 +1,11 @@
 import express from "express";
-import UserService from "../../services/user.service";
+import ArtworkService from "../../services/artwork.service";
 const Artwork = express.Router();
 
-Artwork.get("/:email", async (req, res, next) => {
+Artwork.get("/", async (req, res, next) => {
+  const artworkService = new ArtworkService();
   try {
-    const userService = new UserService();
-    const user = await userService.getUserByEmail(req.params.email);
-    const artworks = await user.getArtworks();
+    const artworks = await artworkService.listPublish();
     res.json({ response: artworks });
   } catch (error) {
     next(error);

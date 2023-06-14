@@ -1,4 +1,4 @@
-import UnauthorizedError from "../errors/unauthorized.error";
+import UserUnauthorizedError from "../errors/UserUnauthorizedError";
 import { User, UserProps } from "../models/user.model";
 import bcrypt from "bcrypt";
 
@@ -9,17 +9,14 @@ class AuthenService {
         email: email,
       },
     })) as UserProps;
-
+    return user;
     if (user) {
       const match = await bcrypt.compare(password, user.hashPassword);
       if (match) {
         return user;
       }
     }
-    throw new UnauthorizedError(
-      "UserUnauthorized",
-      "Authentication failed permisssion denied"
-    );
+    throw new UserUnauthorizedError();
   }
 }
 export default AuthenService;

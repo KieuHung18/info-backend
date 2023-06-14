@@ -55,9 +55,9 @@ module.exports = {
         type: DataTypes.STRING,
         field: "phone",
       },
-      profileUrl: {
-        type: DataTypes.STRING,
-        field: "profileUrl",
+      profile: {
+        type: DataTypes.JSONB,
+        field: "profile",
       },
       address: {
         type: DataTypes.STRING,

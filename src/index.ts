@@ -3,7 +3,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import Apis from "./apis/init.api";
 import { logError, returnError } from "./middlewares/error-handling.middleware";
-import NotFoundError from "./errors/not-found.error";
+import NotFoundError from "./errors/base-error/not-found.error";
 
 const port = process.env.PORT || 3001;
 const app = express();

@@ -1,9 +1,9 @@
-import BadRequest from "../errors/bad-request.error";
-import ConflictError from "../errors/conflict.error";
-import NotFoundError from "../errors/not-found.error";
+import BadRequest from "../errors/base-error/bad-request.error";
 import { User, UserProps } from "../models/user.model";
 import bcrypt from "bcrypt";
 import { BYCRYPT_SALT_ROUNDS } from "./constant";
+import EmailConflictError from "../errors/EmailConflictError";
+import UserNotFoundError from "../errors/UserNotFoundError";
 
 class UserService {
   private async hashPassword(password: string): Promise<string> {
@@ -23,34 +23,31 @@ class UserService {
         throw new BadRequest(error.name, error.message);
       }
       if (error.name === "SequelizeUniqueConstraintError") {
-        throw new ConflictError("EmailConflict", "Email already exists");
+        throw new EmailConflictError();
       }
       throw error;
     }
   }
 
-  public async getUserById(id: string): Promise<UserProps> {
-    const user = await User.findByPk(id);
+  public async retrieve(id: string): Promise<UserProps> {
+    const user = await User.findByPk(id, {
+      attributes: { exclude: ["hashPassword"] },
+    });
     if (user) {
       return user as UserProps;
     } else {
-      throw new NotFoundError("UserQueryError", "User not found");
+      throw new UserNotFoundError();
     }
   }
 
-  public async getUserByEmail(email: string): Promise<UserProps> {
-    const user = (await User.findOne({
-      where: {
-        email: email,
-      },
-      attributes: {
-        exclude: ["hashPassword", "createdAt", "updatedAt"],
-      },
-    })) as UserProps;
+  public async findOne(): Promise<UserProps> {
+    const user = await User.findOne({
+      attributes: { exclude: ["hashPassword"] },
+    });
     if (user) {
-      return user;
+      return user as UserProps;
     } else {
-      throw new NotFoundError("UserQueryError", "User not found");
+      throw new UserNotFoundError();
     }
   }
 
@@ -58,7 +55,7 @@ class UserService {
     if (data.hashPassword) {
       data.hashPassword = await this.hashPassword(data.hashPassword);
     }
-    const user = await this.getUserById(id);
+    const user = await this.retrieve(id);
     Object.assign(user, data);
     user.save();
   }

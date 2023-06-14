@@ -1,19 +1,7 @@
-import {
-  DataTypes,
-  HasManyAddAssociationMixin,
-  HasManyAddAssociationsMixin,
-  HasManyCountAssociationsMixin,
-  HasManyCreateAssociationMixin,
-  HasManyGetAssociationsMixin,
-  HasManyHasAssociationMixin,
-  HasManyHasAssociationsMixin,
-  HasManyRemoveAssociationMixin,
-  HasManyRemoveAssociationsMixin,
-  HasManySetAssociationsMixin,
-  Model,
-} from "sequelize";
+import { DataTypes, Model } from "sequelize";
 import sequelize from "../databases/postgres.database";
-import { Artwork, ArtworkProps } from "./artwork.model";
+import { Artwork, ImageProps } from "./artwork.model";
+import { Project } from "./project.model";
 
 export interface UserProps extends Model {
   id: string;
@@ -28,20 +16,18 @@ export interface UserProps extends Model {
   aboutMe: string | null;
   phone: string | null;
   address: string | null;
-  profileUrl: string | null;
+  profile: ImageProps | null;
   createdAt: Date;
   updatedAt: Date;
 
-  getArtworks: HasManyGetAssociationsMixin<ArtworkProps>;
-  addArtwork: HasManyAddAssociationMixin<ArtworkProps, number>;
-  addArtworks: HasManyAddAssociationsMixin<ArtworkProps, number>;
-  setArtworks: HasManySetAssociationsMixin<ArtworkProps, number>;
-  removeArtwork: HasManyRemoveAssociationMixin<ArtworkProps, number>;
-  removeArtworks: HasManyRemoveAssociationsMixin<ArtworkProps, number>;
-  hasArtwork: HasManyHasAssociationMixin<ArtworkProps, number>;
-  hasArtworks: HasManyHasAssociationsMixin<ArtworkProps, number>;
-  countArtworks: HasManyCountAssociationsMixin;
-  createArtwork: HasManyCreateAssociationMixin<ArtworkProps, "ownerId">;
+  getArtworks;
+  removeArtwork;
+  createArtwork;
+
+  getProjects;
+  removeProject;
+  createProject;
+  hasProject;
 }
 
 export const User = sequelize.define(
@@ -88,8 +74,8 @@ export const User = sequelize.define(
     phone: {
       type: DataTypes.STRING,
     },
-    profileUrl: {
-      type: DataTypes.STRING,
+    profile: {
+      type: DataTypes.JSONB,
     },
     address: {
       type: DataTypes.STRING,
@@ -111,6 +97,14 @@ User.hasMany(Artwork, {
   foreignKey: "userId",
 });
 Artwork.belongsTo(User, {
+  as: "user",
+  foreignKey: "userId",
+});
+User.hasMany(Project, {
+  as: "projects",
+  foreignKey: "userId",
+});
+Project.belongsTo(User, {
   as: "user",
   foreignKey: "userId",
 });

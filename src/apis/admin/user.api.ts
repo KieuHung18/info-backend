@@ -23,7 +23,7 @@ User.post("/:id", async (req, res, next) => {
 
 User.get("/:id", async (req, res, next) => {
   try {
-    const user = await userService.getUserById(req.params.id);
+    const user = await userService.retrieve(req.params.id);
     res.json({ response: user });
   } catch (error) {
     next(error);

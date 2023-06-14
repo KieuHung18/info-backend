@@ -5,6 +5,7 @@ import Artwork from "./artwork.api";
 import Authentication from "./authentication.api";
 import session from "../../middlewares/session.middleware";
 import authUser from "../../middlewares/auth.middleware";
+import Project from "./project.api";
 
 const Admin = express.Router();
 
@@ -17,5 +18,6 @@ Admin.get("/", (req, res) => {
 Admin.use("/users", User);
 Admin.use("/artworks", Artwork);
 Admin.use("/uploads", Uploads);
+Admin.use("/projects", Project);
 
 export default Admin;

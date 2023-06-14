@@ -1,20 +1,18 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../databases/postgres.database";
+import { ImageProps } from "./artwork.model";
 
-export interface ImageProps {
-  publicId: string;
-  url: string;
-}
-export interface ArtworkProps extends Model {
+export interface ProjectProps extends Model {
   id: string;
-  image: ImageProps;
   name: string;
+  description: string;
+  content: string;
+  images: ImageProps[];
   feature: boolean;
   publish: boolean;
 }
-
-export const Artwork = sequelize.define(
-  "Artwork",
+export const Project = sequelize.define(
+  "Project",
   {
     id: {
       type: DataTypes.UUID,
@@ -22,12 +20,17 @@ export const Artwork = sequelize.define(
       primaryKey: true,
       allowNull: false,
     },
-    image: {
+    images: {
       type: DataTypes.JSONB,
-      allowNull: false,
     },
     name: {
       type: DataTypes.STRING,
+    },
+    description: {
+      type: DataTypes.STRING(800),
+    },
+    content: {
+      type: DataTypes.STRING(8000),
     },
     feature: {
       type: DataTypes.BOOLEAN,

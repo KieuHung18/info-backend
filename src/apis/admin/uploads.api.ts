@@ -9,8 +9,8 @@ const cloudinaryService = new CloudinaryService();
 Uploads.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
 Uploads.post("/", upload.array("files", 10), async (req, res, next) => {
   try {
-    const urls = await cloudinaryService.uploads(req.files);
-    res.json({ response: urls });
+    const uploadedFiles = await cloudinaryService.uploads(req.files);
+    res.json({ response: uploadedFiles });
   } catch (error) {
     next(error);
   }

@@ -1,7 +1,7 @@
 import fs from "fs";
 import cloudinary = require("cloudinary");
 import dotenv from "dotenv";
-import TimeoutError from "../errors/timeout.error";
+import TimeoutError from "../errors/base-error/timeout.error";
 
 dotenv.config();
 
@@ -52,7 +52,7 @@ class CloudinaryService {
   }
   public async delete(publicId: string) {
     await cloudinaryV2.uploader.destroy(publicId, function (result) {
-      console.log(result);
+      return result;
     });
   }
 }
