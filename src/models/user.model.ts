@@ -1,8 +1,16 @@
-import { DataTypes, Model } from "sequelize";
+import { DataTypes, JSONB, Model } from "sequelize";
 import sequelize from "../databases/postgres.database";
 import { Artwork, ImageProps } from "./artwork.model";
 import { Project } from "./project.model";
 
+export interface SectionItem {
+  name: string;
+  experience: number;
+}
+export interface UserMetadata {
+  section: string;
+  sectionItems: SectionItem[];
+}
 export interface UserProps extends Model {
   id: string;
   firstName: string;
@@ -17,12 +25,14 @@ export interface UserProps extends Model {
   phone: string | null;
   address: string | null;
   profile: ImageProps | null;
+  metadata: UserMetadata[];
   createdAt: Date;
   updatedAt: Date;
 
   getArtworks;
   removeArtwork;
   createArtwork;
+  addArtworks;
 
   getProjects;
   removeProject;
@@ -79,6 +89,9 @@ export const User = sequelize.define(
     },
     address: {
       type: DataTypes.STRING,
+    },
+    metadata: {
+      type: JSONB,
     },
     createdAt: {
       type: DataTypes.DATE,

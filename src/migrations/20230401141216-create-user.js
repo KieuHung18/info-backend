@@ -63,6 +63,10 @@ module.exports = {
         type: DataTypes.STRING,
         field: "address",
       },
+      metadata: {
+        type: DataTypes.JSONB,
+        field: "metadata",
+      },
       createdAt: {
         type: DataTypes.DATE,
         field: "createdAt",
