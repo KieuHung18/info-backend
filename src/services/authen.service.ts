@@ -9,7 +9,6 @@ class AuthenService {
         email: email,
       },
     })) as UserProps;
-    return user;
     if (user) {
       const match = await bcrypt.compare(password, user.hashPassword);
       if (match) {
