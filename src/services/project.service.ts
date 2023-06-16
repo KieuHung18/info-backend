@@ -41,11 +41,15 @@ class ProjectService {
     return projects as ProjectProps[];
   }
   public async retrievePublish(id: string): Promise<ProjectProps> {
-    const projects = await Project.findOne({
+    const project = await Project.findOne({
       where: { id: id, publish: true },
       order: [["createdAt", "DESC"]],
     });
-    return projects as ProjectProps;
+    if (project) {
+      return project as ProjectProps;
+    } else {
+      throw new ProjectNotFoundError();
+    }
   }
   public async update(project: ProjectProps, newProject: ProjectProps) {
     Object.assign(project, newProject);
