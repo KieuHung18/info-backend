@@ -22,6 +22,9 @@ const corsOptions = {
 app.enable("trust proxy");
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
+app.get("/", (req, res) => {
+  res.json({ response: "OK" });
+});
 app.get("/health", (req, res) => {
   res.send("OK");
 });

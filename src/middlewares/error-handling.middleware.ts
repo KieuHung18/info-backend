@@ -1,5 +1,6 @@
 const logError = (err, req, res, next) => {
-  console.error(err);
+  console.log("Api: ", req.url);
+  console.error("Error: ", err);
   next(err);
 };
 
