@@ -20,16 +20,7 @@ export interface UserSessionData extends SessionData {
 //   });
 //   return sessionData;
 // };
-export const getSession = async (req): Promise<UserSessionData> => {
-  let sessionData: UserSessionData;
-  mongoStore.get(req.headers.authentication, (err, session) => {
-    if (err) {
-      console.log(err);
-    }
-    sessionData = session;
-  });
-  return sessionData;
-};
+export const getSession = async (req): Promise<UserSessionData> => req.session;
 // export const getSession = async (req): Promise<SessionData> => {
 //   const sessionData: SessionData = req.session;
 //   return sessionData;
