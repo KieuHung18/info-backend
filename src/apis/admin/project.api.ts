@@ -1,5 +1,8 @@
 import express from "express";
-import { SessionData, getSession } from "../../middlewares/session.middleware";
+import {
+  UserSessionData,
+  getSession,
+} from "../../middlewares/session.middleware";
 import UserService from "../../services/user.service";
 import ProjectService from "../../services/project.service";
 
@@ -7,7 +10,7 @@ const Project = express.Router();
 const userService = new UserService();
 Project.post("/", async (req, res, next) => {
   try {
-    const session: SessionData = await getSession(req);
+    const session: UserSessionData = await getSession(req);
     const user = await userService.retrieve(session.userId);
     const project = await user.createProject(req.body);
     res.json({ response: project });
@@ -17,7 +20,7 @@ Project.post("/", async (req, res, next) => {
 });
 Project.post("/:id", async (req, res, next) => {
   try {
-    const session: SessionData = await getSession(req);
+    const session: UserSessionData = await getSession(req);
     const projectService = new ProjectService();
     const project = await projectService.retrieveProjectOfUser(
       req.params.id,
@@ -31,7 +34,7 @@ Project.post("/:id", async (req, res, next) => {
 });
 Project.get("/", async (req, res, next) => {
   try {
-    const session: SessionData = await getSession(req);
+    const session: UserSessionData = await getSession(req);
     const user = await userService.retrieve(session.userId);
     const projects = await user.getProjects();
     res.json({ response: projects });
@@ -41,7 +44,7 @@ Project.get("/", async (req, res, next) => {
 });
 Project.get("/:id", async (req, res, next) => {
   try {
-    const session: SessionData = await getSession(req);
+    const session: UserSessionData = await getSession(req);
     const projectService = new ProjectService();
     const project = await projectService.retrieveProjectOfUser(
       req.params.id,
@@ -55,7 +58,7 @@ Project.get("/:id", async (req, res, next) => {
 
 Project.delete("/:id", async (req, res, next) => {
   try {
-    const session: SessionData = await getSession(req);
+    const session: UserSessionData = await getSession(req);
     const projectService = new ProjectService();
     const project = await projectService.retrieveProjectOfUser(
       req.params.id,
