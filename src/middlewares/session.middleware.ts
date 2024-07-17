@@ -1,5 +1,5 @@
-import expressSession, { Session, SessionData } from "express-session";
-// import redisStore from "../databases/redis.database";
+import expressSession, { Session } from "express-session";
+import redisStore from "../databases/redis.database";
 import mongoStore from "../databases/mongo.database";
 import dotenv from "dotenv";
 import { EXPRESS_SESSION_MAX_AGE } from "./constant";
@@ -7,7 +7,6 @@ import { EXPRESS_SESSION_MAX_AGE } from "./constant";
 dotenv.config();
 
 export interface UserSessionData extends Session {
-  sid?: string;
   userId?: string;
 }
 
@@ -21,13 +20,14 @@ export interface UserSessionData extends Session {
 //   });
 //   return sessionData;
 // };
-export const getSession = async (req): Promise<UserSessionData> => {
+
+export const getSession = (req, cb): UserSessionData => {
   let sessionData: any;
   mongoStore.get(req.headers.authentication, (err, session) => {
     if (err) {
       console.log(err);
     }
-    sessionData = session;
+    cb(session);
   });
   return sessionData;
 };
