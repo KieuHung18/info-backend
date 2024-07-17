@@ -16,7 +16,8 @@ Authentication.post("/login", async (req, res, next) => {
   try {
     const user = await authenService.authen(email, password);
     session.userId = user.id;
-    res.json({ response: session.userId });
+    console.log(session.id);
+    res.json({ response: session.id });
   } catch (error) {
     next(error);
   }
