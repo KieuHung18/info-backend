@@ -1,14 +1,17 @@
 import express from "express";
 import ArtworkService from "../../services/artwork.service";
 import UserService from "../../services/user.service";
-import { SessionData, getSession } from "../../middlewares/session.middleware";
+import {
+  UserSessionData,
+  getSession,
+} from "../../middlewares/session.middleware";
 
 const Artwork = express.Router();
 const artworkService = new ArtworkService();
 const userService = new UserService();
 
 Artwork.post("/", async (req, res, next) => {
-  const session: SessionData = await getSession(req);
+  const session: UserSessionData = await getSession(req);
   try {
     const artwork = await artworkService.create(req.body);
     const user = await userService.retrieve(session.userId);
@@ -29,7 +32,7 @@ Artwork.post("/:id", async (req, res, next) => {
 
 Artwork.get("/", async (req, res, next) => {
   try {
-    const session: SessionData = await getSession(req);
+    const session: UserSessionData = await getSession(req);
     const user = await userService.retrieve(session.userId);
     const artworks = await user.getArtworks();
     res.json({ response: artworks });
