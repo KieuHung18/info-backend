@@ -11,20 +11,24 @@ const artworkService = new ArtworkService();
 const userService = new UserService();
 
 Artwork.post("/", async (req, res, next) => {
-  const session: UserSessionData = await getSession(req);
+  // const session: UserSessionData = await getSession(req);
   try {
-    const artwork = await artworkService.create(req.body);
-    const user = await userService.retrieve(session.userId);
-    user.addArtworks(artwork);
-    res.json({ response: "Artwork added" });
+    getSession(req, async (session) => {
+      const artwork = await artworkService.create(req.body);
+      const user = await userService.retrieve(session.userId);
+      user.addArtworks(artwork);
+      res.json({ response: "Artwork added" });
+    });
   } catch (error) {
     next(error);
   }
 });
 Artwork.post("/:id", async (req, res, next) => {
   try {
-    const artwork = await artworkService.update(req.params.id, req.body);
-    res.json({ response: artwork });
+    getSession(req, async (session) => {
+      const artwork = await artworkService.update(req.params.id, req.body);
+      res.json({ response: artwork });
+    });
   } catch (error) {
     next(error);
   }
@@ -32,10 +36,12 @@ Artwork.post("/:id", async (req, res, next) => {
 
 Artwork.get("/", async (req, res, next) => {
   try {
-    const session: UserSessionData = await getSession(req);
-    const user = await userService.retrieve(session.userId);
-    const artworks = await user.getArtworks();
-    res.json({ response: artworks });
+    // const session: UserSessionData = await getSession(req);
+    getSession(req, async (session) => {
+      const user = await userService.retrieve(session.userId);
+      const artworks = await user.getArtworks();
+      res.json({ response: artworks });
+    });
   } catch (error) {
     next(error);
   }
@@ -43,8 +49,10 @@ Artwork.get("/", async (req, res, next) => {
 
 Artwork.delete("/:id", async (req, res, next) => {
   try {
-    artworkService.delete(req.params.id);
-    res.json({ response: "Artwork deleted" });
+    getSession(req, async (session) => {
+      artworkService.delete(req.params.id);
+      res.json({ response: "Artwork deleted" });
+    });
   } catch (error) {
     next(error);
   }
